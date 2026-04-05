@@ -4,11 +4,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Boring Combinator — Stress-Test Your Startup Idea in 30 Minutes",
   description:
-    "An AI VC debates your startup idea for 3 rounds, then builds you a live landing page with waitlist signup. Free to pitch. $29 to launch. No code needed.",
+    "An AI VC debates your startup idea across 3 rounds, then builds you a live landing page with waitlist signup. Find out if people want what you're building before you write a single line of code.",
   openGraph: {
     title: "Boring Combinator — Stress-Test Your Startup Idea in 30 Minutes",
     description:
-      "An AI VC debates your startup idea for 3 rounds, then builds you a live landing page with waitlist signup. Free to pitch. $29 to launch. No code needed.",
+      "An AI VC debates your startup idea across 3 rounds, then builds you a live landing page with waitlist signup. Find out if people want what you're building before you write a single line of code.",
     type: "website",
   },
 };
@@ -20,12 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        style={{
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-        }}
-      >
+      <body className="antialiased font-sans">
         {children}
       </body>
     </html>
