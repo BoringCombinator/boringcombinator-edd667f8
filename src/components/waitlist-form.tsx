@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 
-export default function WaitlistForm({ id }: { id?: string }) {
+export default function WaitlistForm() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
 
     setStatus("loading");
+    setErrorMsg("");
 
     try {
       const res = await fetch("https://boringcombinator.com/api/waitlist", {
@@ -24,115 +24,112 @@ export default function WaitlistForm({ id }: { id?: string }) {
         }),
       });
 
-      if (res.ok) {
-        setStatus("success");
-        setEmail("");
-      } else {
-        setStatus("error");
-      }
-    } catch {
+      if (!res.ok) throw new Error("Something went wrong. Try again.");
+      setStatus("success");
+      setEmail("");
+    } catch (err) {
       setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
   if (status === "success") {
     return (
       <div
-        id={id}
         style={{
-          padding: "16px 24px",
-          background: "var(--color-surface)",
-          borderRadius: "8px",
-          border: "0.5px solid var(--color-border)",
-          fontFamily: "var(--font-sans)",
-          fontSize: "15px",
-          color: "var(--color-fg)",
+          textAlign: "center",
+          padding: "20px 0",
         }}
       >
-        You're on the list. We'll be in touch soon.
+        <p
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "18px",
+            color: "var(--color-fg)",
+          }}
+        >
+          You're on the list. We'll be in touch.
+        </p>
       </div>
     );
   }
 
   return (
     <form
-      id={id}
       onSubmit={handleSubmit}
       style={{
         display: "flex",
-        gap: "10px",
-        maxWidth: "460px",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "12px",
         width: "100%",
-        flexWrap: "wrap",
+        maxWidth: "440px",
+        margin: "0 auto",
       }}
     >
-      <input
-        type="email"
-        required
-        placeholder="you@example.com"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-          if (status === "error") setStatus("idle");
-        }}
+      <div
         style={{
-          flex: "1 1 240px",
-          padding: "12px 16px",
-          fontSize: "15px",
-          fontFamily: "var(--font-sans)",
-          border: "0.5px solid var(--color-border)",
-          borderRadius: "8px",
-          background: "var(--color-bg)",
-          color: "var(--color-fg)",
-          outline: "none",
-          transition: "border-color 150ms ease",
-          minWidth: 0,
-        }}
-        onFocus={(e) =>
-          (e.currentTarget.style.borderColor = "rgba(0,0,0,0.24)")
-        }
-        onBlur={(e) =>
-          (e.currentTarget.style.borderColor = "rgba(0,0,0,0.08)")
-        }
-      />
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        style={{
-          padding: "12px 28px",
-          fontSize: "14px",
-          fontFamily: "var(--font-sans)",
-          fontWeight: 500,
-          background: "var(--color-fg)",
-          color: "var(--color-bg)",
-          border: "none",
-          borderRadius: "8px",
-          cursor: status === "loading" ? "wait" : "pointer",
-          opacity: status === "loading" ? 0.6 : 1,
-          transition: "opacity 150ms ease",
-          whiteSpace: "nowrap",
-        }}
-        onMouseEnter={(e) => {
-          if (status !== "loading") e.currentTarget.style.opacity = "0.8";
-        }}
-        onMouseLeave={(e) => {
-          if (status !== "loading") e.currentTarget.style.opacity = "1";
+          display: "flex",
+          width: "100%",
+          gap: "8px",
+          flexDirection: "row",
         }}
       >
-        {status === "loading" ? "Joining..." : "Join Waitlist"}
-      </button>
-      {status === "error" && (
-        <p
+        <input
+          type="email"
+          required
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           style={{
-            width: "100%",
-            margin: "4px 0 0",
+            flex: 1,
+            padding: "12px 16px",
             fontSize: "14px",
-            color: "#b91c1c",
             fontFamily: "var(--font-sans)",
+            border: "0.5px solid var(--color-border)",
+            borderRadius: "8px",
+            backgroundColor: "var(--color-bg)",
+            color: "var(--color-fg)",
+            outline: "none",
+            transition: "border-color 150ms ease",
+            minWidth: 0,
+          }}
+          onFocus={(e) =>
+            (e.currentTarget.style.borderColor = "var(--color-fg)")
+          }
+          onBlur={(e) =>
+            (e.currentTarget.style.borderColor = "var(--color-border)")
+          }
+        />
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          style={{
+            padding: "12px 24px",
+            fontSize: "14px",
+            fontFamily: "var(--font-sans)",
+            fontWeight: 500,
+            backgroundColor: "var(--color-fg)",
+            color: "var(--color-bg)",
+            border: "none",
+            borderRadius: "8px",
+            cursor: status === "loading" ? "wait" : "pointer",
+            transition: "opacity 150ms ease",
+            whiteSpace: "nowrap",
+            opacity: status === "loading" ? 0.7 : 1,
+          }}
+          onMouseEnter={(e) => {
+            if (status !== "loading") e.currentTarget.style.opacity = "0.8";
+          }}
+          onMouseLeave={(e) => {
+            if (status !== "loading") e.currentTarget.style.opacity = "1";
           }}
         >
-          Something went wrong. Please try again.
-        </p>
+          {status === "loading" ? "Joining..." : "Join Waitlist"}
+        </button>
+      </div>
+      {status === "error" && (
+        <p style={{ fontSize: "13px", color: "#b91c1c" }}>{errorMsg}</p>
       )}
     </form>
   );
