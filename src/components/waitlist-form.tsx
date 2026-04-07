@@ -2,85 +2,138 @@
 
 import { useState } from "react";
 
-export default function WaitlistForm() {
+export default function WaitlistForm({ id }: { id?: string }) {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
 
     setStatus("loading");
-    setErrorMsg("");
 
     try {
       const res = await fetch("https://boringcombinator.com/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: "boringcombinator-edd667f8", email }),
+        body: JSON.stringify({
+          slug: "boringcombinator-edd667f8",
+          email,
+        }),
       });
 
-      if (!res.ok) {
-        throw new Error("Something went wrong. Please try again.");
+      if (res.ok) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
       }
-
-      setStatus("success");
-      setEmail("");
-    } catch (err) {
+    } catch {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   }
 
   if (status === "success") {
     return (
-      <div className="border-2 border-[#E8C547] bg-[#E8C547]/10 px-8 py-10 text-center">
-        <span className="text-4xl block mb-4">🎉</span>
-        <p className="text-[#E8C547] font-black text-xl mb-2">You're on the list.</p>
-        <p className="text-[#F5F4EF]/60 text-sm">
-          We'll let you know the moment the hot seat is ready. Start rehearsing your pitch.
-        </p>
+      <div
+        id={id}
+        style={{
+          padding: "16px 24px",
+          background: "var(--color-surface)",
+          borderRadius: "8px",
+          border: "0.5px solid var(--color-border)",
+          fontFamily: "var(--font-sans)",
+          fontSize: "15px",
+          color: "var(--color-fg)",
+        }}
+      >
+        You're on the list. We'll be in touch soon.
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <input
-          type="email"
-          required
-          placeholder="your@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={status === "loading"}
-          className="flex-1 bg-[#F5F4EF] text-[#1A1A2E] placeholder-[#1A1A2E]/40 px-5 py-4 font-medium text-base focus:outline-none focus:ring-2 focus:ring-[#E8C547] disabled:opacity-50"
-        />
-        <button
-          type="submit"
-          disabled={status === "loading" || !email}
-          className="bg-[#E8C547] text-[#1A1A2E] font-black text-sm px-8 py-4 uppercase tracking-wider hover:bg-[#F5F4EF] transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-        >
-          {status === "loading" ? (
-            <span className="flex items-center gap-2 justify-center">
-              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-              </svg>
-              Joining...
-            </span>
-          ) : (
-            "Join Waitlist"
-          )}
-        </button>
-      </div>
+    <form
+      id={id}
+      onSubmit={handleSubmit}
+      style={{
+        display: "flex",
+        gap: "10px",
+        maxWidth: "460px",
+        width: "100%",
+        flexWrap: "wrap",
+      }}
+    >
+      <input
+        type="email"
+        required
+        placeholder="you@example.com"
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          if (status === "error") setStatus("idle");
+        }}
+        style={{
+          flex: "1 1 240px",
+          padding: "12px 16px",
+          fontSize: "15px",
+          fontFamily: "var(--font-sans)",
+          border: "0.5px solid var(--color-border)",
+          borderRadius: "8px",
+          background: "var(--color-bg)",
+          color: "var(--color-fg)",
+          outline: "none",
+          transition: "border-color 150ms ease",
+          minWidth: 0,
+        }}
+        onFocus={(e) =>
+          (e.currentTarget.style.borderColor = "rgba(0,0,0,0.24)")
+        }
+        onBlur={(e) =>
+          (e.currentTarget.style.borderColor = "rgba(0,0,0,0.08)")
+        }
+      />
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        style={{
+          padding: "12px 28px",
+          fontSize: "14px",
+          fontFamily: "var(--font-sans)",
+          fontWeight: 500,
+          background: "var(--color-fg)",
+          color: "var(--color-bg)",
+          border: "none",
+          borderRadius: "8px",
+          cursor: status === "loading" ? "wait" : "pointer",
+          opacity: status === "loading" ? 0.6 : 1,
+          transition: "opacity 150ms ease",
+          whiteSpace: "nowrap",
+        }}
+        onMouseEnter={(e) => {
+          if (status !== "loading") e.currentTarget.style.opacity = "0.8";
+        }}
+        onMouseLeave={(e) => {
+          if (status !== "loading") e.currentTarget.style.opacity = "1";
+        }}
+      >
+        {status === "loading" ? "Joining..." : "Join Waitlist"}
+      </button>
       {status === "error" && (
-        <p className="mt-3 text-red-400 text-sm font-medium text-left">{errorMsg}</p>
+        <p
+          style={{
+            width: "100%",
+            margin: "4px 0 0",
+            fontSize: "14px",
+            color: "#b91c1c",
+            fontFamily: "var(--font-sans)",
+          }}
+        >
+          Something went wrong. Please try again.
+        </p>
       )}
-      <p className="mt-4 text-[#F5F4EF]/30 text-xs">
-        No spam. No subscriptions. Just a heads-up when we launch.
-      </p>
     </form>
   );
 }

@@ -1,187 +1,611 @@
 import WaitlistForm from "@/components/waitlist-form";
 
-export default function Page() {
+function Section({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <main className="min-h-screen bg-[#F5F4EF] text-[#1A1A2E]">
+    <section
+      className={className}
+      style={{
+        maxWidth: "960px",
+        margin: "0 auto",
+        padding: "80px 24px",
+      }}
+    >
+      {children}
+    </section>
+  );
+}
+
+function Card({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        background: "var(--color-surface)",
+        border: "0.5px solid var(--color-border)",
+        borderRadius: "12px",
+        padding: "32px",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function StepNumber({ n }: { n: number }) {
+  return (
+    <span
+      style={{
+        fontFamily: "var(--font-mono)",
+        fontSize: "13px",
+        color: "var(--color-muted)",
+        display: "block",
+        marginBottom: "12px",
+        letterSpacing: "0.02em",
+      }}
+    >
+      {String(n).padStart(2, "0")}
+    </span>
+  );
+}
+
+export default function Home() {
+  return (
+    <main>
       {/* Nav */}
-      <nav className="px-6 py-5 flex items-center justify-between max-w-5xl mx-auto">
-        <span className="font-black text-lg tracking-tight">
-          Boring<span className="text-[#E8C547]">Combinator</span>
+      <nav
+        style={{
+          maxWidth: "960px",
+          margin: "0 auto",
+          padding: "24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "18px",
+            color: "var(--color-fg)",
+          }}
+        >
+          boring combinator
         </span>
         <a
           href="#waitlist"
-          className="text-sm font-semibold border-2 border-[#1A1A2E] px-4 py-2 hover:bg-[#1A1A2E] hover:text-[#F5F4EF] transition-colors"
+          className="nav-cta"
         >
           Join Waitlist
         </a>
       </nav>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-16 pb-24">
-        <div className="inline-block bg-[#E8C547] text-[#1A1A2E] text-xs font-black uppercase tracking-widest px-3 py-1 mb-8">
-          For solo founders
-        </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] tracking-tight max-w-3xl mb-6">
-          Your startup idea has 30 minutes to survive a VC interrogation.
-        </h1>
-        <p className="text-lg sm:text-xl text-[#1A1A2E]/70 max-w-2xl mb-10 leading-relaxed">
-          An AI investor debates you across 3 brutal rounds — market size, customer reality, go-to-market. If your idea holds up, you walk away with a live landing page and a waitlist. If it doesn't, better to find out now.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 items-start">
-          <a
-            href="#waitlist"
-            className="bg-[#1A1A2E] text-[#E8C547] font-black text-base px-8 py-4 hover:bg-[#E8C547] hover:text-[#1A1A2E] transition-colors inline-block"
+      <section
+        style={{
+          padding: "80px 24px 100px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+          <h1
+            style={{
+              fontSize: "clamp(32px, 5vw, 52px)",
+              fontFamily: "var(--font-serif)",
+              fontWeight: 400,
+              marginBottom: "24px",
+              lineHeight: 1.15,
+              letterSpacing: "-0.01em",
+              color: "var(--color-fg)",
+            }}
           >
-            Pitch Your Idea — It's Free
-          </a>
-          <span className="text-sm text-[#1A1A2E]/50 self-center">No credit card. No fluff. Just fire.</span>
-        </div>
-
-        {/* Target audience callout */}
-        <div className="mt-16 border-l-4 border-[#E8C547] pl-6 max-w-2xl">
-          <p className="text-[#1A1A2E]/60 text-sm font-medium uppercase tracking-wider mb-1">This is for you if</p>
-          <p className="text-[#1A1A2E] text-base leading-relaxed">
-            You've spent two days in ChatGPT tabs and still don't know if anyone actually wants the thing you're building.
+            Stress-test your startup idea in 30 minutes.
+            <br />
+            Ship a landing page before you write code.
+          </h1>
+          <p
+            style={{
+              fontSize: "17px",
+              lineHeight: 1.65,
+              color: "var(--color-muted)",
+              maxWidth: "560px",
+              margin: "0 auto 40px",
+              fontFamily: "var(--font-sans)",
+            }}
+          >
+            An AI VC debates your idea for 3 rounds. Survive the challenge and
+            get a live landing page with waitlist signup. Find out if real people
+            actually want what you're building.
           </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <WaitlistForm id="waitlist-hero" />
+          </div>
         </div>
       </section>
 
-      {/* Rounds visual */}
-      <section className="bg-[#1A1A2E] text-[#F5F4EF] py-16 px-6">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-[#E8C547] text-xs font-black uppercase tracking-widest mb-8">3 Rounds. No Mercy.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-[#F5F4EF]/10">
+      {/* The Problem */}
+      <div style={{ background: "var(--color-surface)" }}>
+        <Section>
+          <div style={{ maxWidth: "640px" }}>
+            <p
+              style={{
+                fontSize: "13px",
+                fontFamily: "var(--font-mono)",
+                color: "var(--color-muted)",
+                marginBottom: "16px",
+                letterSpacing: "0.04em",
+                textTransform: "uppercase",
+              }}
+            >
+              The problem
+            </p>
+            <h2
+              style={{
+                fontSize: "clamp(24px, 3.5vw, 36px)",
+                fontFamily: "var(--font-serif)",
+                fontWeight: 400,
+                marginBottom: "24px",
+                lineHeight: 1.25,
+              }}
+            >
+              You spent a week validating. You still don't know if anyone wants
+              it.
+            </h2>
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.7,
+                color: "var(--color-muted)",
+                marginBottom: "16px",
+              }}
+            >
+              You asked ChatGPT if your idea was good. It said yes. You asked
+              your friends. They said "that's cool." You spent two days fighting
+              with a page builder. You posted on Reddit and got three upvotes.
+            </p>
+            <p
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.7,
+                color: "var(--color-muted)",
+              }}
+            >
+              A week gone. Zero signal on real demand. That's the default path
+              for solo founders right now.
+            </p>
+          </div>
+        </Section>
+      </div>
+
+      {/* How It Works */}
+      <Section>
+        <p
+          style={{
+            fontSize: "13px",
+            fontFamily: "var(--font-mono)",
+            color: "var(--color-muted)",
+            marginBottom: "16px",
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+          }}
+        >
+          How it works
+        </p>
+        <h2
+          style={{
+            fontSize: "clamp(24px, 3.5vw, 36px)",
+            fontFamily: "var(--font-serif)",
+            fontWeight: 400,
+            marginBottom: "48px",
+            lineHeight: 1.25,
+            maxWidth: "560px",
+          }}
+        >
+          From raw idea to live landing page in 30 minutes
+        </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          <Card>
+            <StepNumber n={1} />
+            <h3
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "20px",
+                fontWeight: 400,
+                marginBottom: "12px",
+              }}
+            >
+              Describe your idea
+            </h3>
+            <p
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.6,
+                color: "var(--color-muted)",
+              }}
+            >
+              Two sentences is enough. Who is it for and what does it do? No
+              pitch deck required.
+            </p>
+          </Card>
+
+          <Card>
+            <StepNumber n={2} />
+            <h3
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "20px",
+                fontWeight: 400,
+                marginBottom: "12px",
+              }}
+            >
+              Defend it in 3 rounds
+            </h3>
+            <p
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.6,
+                color: "var(--color-muted)",
+              }}
+            >
+              Our AI VC pressure-tests your market, customer, and go-to-market.
+              It's adversarial on purpose. Your thinking gets sharper with each
+              round.
+            </p>
+          </Card>
+
+          <Card>
+            <StepNumber n={3} />
+            <h3
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "20px",
+                fontWeight: 400,
+                marginBottom: "12px",
+              }}
+            >
+              Get a live page
+            </h3>
+            <p
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.6,
+                color: "var(--color-muted)",
+              }}
+            >
+              Your landing page goes live at yourname.boringcombinator.com with
+              waitlist signup built in. Start collecting emails today.
+            </p>
+          </Card>
+        </div>
+      </Section>
+
+      {/* Value Props */}
+      <div style={{ background: "var(--color-surface)" }}>
+        <Section>
+          <p
+            style={{
+              fontSize: "13px",
+              fontFamily: "var(--font-mono)",
+              color: "var(--color-muted)",
+              marginBottom: "16px",
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+            }}
+          >
+            What you get
+          </p>
+          <h2
+            style={{
+              fontSize: "clamp(24px, 3.5vw, 36px)",
+              fontFamily: "var(--font-serif)",
+              fontWeight: 400,
+              marginBottom: "48px",
+              lineHeight: 1.25,
+              maxWidth: "560px",
+            }}
+          >
+            Everything you need to test demand. Nothing you don't.
+          </h2>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "32px",
+            }}
+          >
             {[
-              { round: "01", label: "Market Size", detail: "Is this real or did you just read a Statista headline?" },
-              { round: "02", label: "Customer Reality", detail: "Who specifically is buying this, and why would they switch?" },
-              { round: "03", label: "Go-to-Market", detail: "How do you get your first 100 customers without a following?" },
-            ].map((r) => (
-              <div key={r.round} className="p-8 bg-[#1A1A2E] border border-[#F5F4EF]/10">
-                <span className="text-[#E8C547] font-black text-3xl block mb-3">{r.round}</span>
-                <h3 className="font-black text-lg mb-2">{r.label}</h3>
-                <p className="text-[#F5F4EF]/50 text-sm leading-relaxed">{r.detail}</p>
+              {
+                title: "Adversarial idea debate",
+                desc: "Three rounds of hard questions about your market, customer, and distribution. Sharper than asking ChatGPT. Sharper than asking your friends. The kind of pressure that makes weak ideas obvious and good ideas better.",
+              },
+              {
+                title: "Live landing page with waitlist",
+                desc: "A clean, hosted landing page at yourname.boringcombinator.com. Built from sharpened thinking, not vibes. Waitlist signup included. Live in under 30 minutes.",
+              },
+              {
+                title: "SEO blog posts and social drafts",
+                desc: "Content that drives traffic from day one. Blog posts targeting keywords your customers are already searching for. Social media drafts ready to copy and paste. No more staring at a blank page.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "200px 1fr",
+                  gap: "24px",
+                  alignItems: "start",
+                }}
+                className="value-prop-row"
+              >
+                <h3
+                  style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "18px",
+                    fontWeight: 400,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    lineHeight: 1.65,
+                    color: "var(--color-muted)",
+                    margin: 0,
+                  }}
+                >
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Value Props */}
-      <section className="max-w-5xl mx-auto px-6 py-24">
-        <p className="text-[#E8C547] bg-[#1A1A2E] inline-block text-xs font-black uppercase tracking-widest px-3 py-1 mb-10">What you get</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "A Real Fight",
-              description: "Three rounds of adversarial back-and-forth pressure-test your market, your customer, and your plan — not a score out of 10, but actual hard questions you have to answer.",
-              icon: "⚔️",
-            },
-            {
-              title: "Live Page, Fast",
-              description: "Survive the debate and your landing page goes live at yourname.boringcombinator.com in under 30 minutes — waitlist signup included, no Carrd account required.",
-              icon: "🚀",
-            },
-            {
-              title: "Traffic From Day One",
-              description: "Get SEO blog posts and social content drafted from your sharpened pitch so you can start driving real traffic this week, not after you've figured out Webflow.",
-              icon: "📈",
-            },
-          ].map((vp) => (
-            <div
-              key={vp.title}
-              className="border-2 border-[#1A1A2E] p-8 hover:bg-[#1A1A2E] hover:text-[#F5F4EF] transition-colors group"
-            >
-              <span className="text-3xl block mb-4">{vp.icon}</span>
-              <h3 className="font-black text-xl mb-3 group-hover:text-[#E8C547]">{vp.title}</h3>
-              <p className="text-sm leading-relaxed text-[#1A1A2E]/70 group-hover:text-[#F5F4EF]/70">
-                {vp.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+        </Section>
+      </div>
 
       {/* Differentiation */}
-      <section className="bg-[#E8C547] py-20 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-[#1A1A2E]/50 text-xs font-black uppercase tracking-widest mb-4">Why not just use ChatGPT</p>
-            <h2 className="font-black text-3xl sm:text-4xl leading-tight text-[#1A1A2E]">
-              Most tools hand you a score. This one argues back.
-            </h2>
-          </div>
-          <div>
-            <p className="text-[#1A1A2E]/80 text-base leading-relaxed">
-              Boring Combinator puts you in the hot seat the same way a real investor would — so when you do talk to humans, you're not winging it. Describe your idea and get a score? Anyone can do that. Defend your idea under pressure? That's where you find out if it's real.
-            </p>
-          </div>
+      <Section>
+        <div
+          style={{
+            maxWidth: "640px",
+            margin: "0 auto",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "clamp(24px, 3.5vw, 36px)",
+              fontFamily: "var(--font-serif)",
+              fontWeight: 400,
+              marginBottom: "24px",
+              lineHeight: 1.25,
+            }}
+          >
+            This is not "describe your idea and get a score"
+          </h2>
+          <p
+            style={{
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "var(--color-muted)",
+              marginBottom: "16px",
+            }}
+          >
+            Most validation tools give you a pat on the back and a number.
+            That's not validation. That's a horoscope.
+          </p>
+          <p
+            style={{
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "var(--color-muted)",
+            }}
+          >
+            Boring Combinator forces you to defend your idea under adversarial
+            pressure. The same way real VCs evaluate startups. So your landing
+            page is built on tested assumptions, not wishful thinking.
+          </p>
         </div>
-      </section>
+      </Section>
 
       {/* Pricing */}
-      <section className="max-w-5xl mx-auto px-6 py-24">
-        <p className="text-[#E8C547] bg-[#1A1A2E] inline-block text-xs font-black uppercase tracking-widest px-3 py-1 mb-10">Pricing</p>
-        <h2 className="font-black text-3xl sm:text-4xl mb-12 max-w-xl">Simple. No subscriptions. No surprises.</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="border-2 border-[#1A1A2E] p-8">
-            <p className="text-3xl font-black mb-1">Free</p>
-            <p className="text-[#1A1A2E]/50 text-xs uppercase tracking-wider font-semibold mb-6">AI Debate + Score</p>
-            <ul className="space-y-3 text-sm">
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Full 3-round debate</li>
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Brutally honest feedback</li>
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Find out if it's worth building</li>
-            </ul>
-          </div>
-          <div className="border-2 border-[#1A1A2E] bg-[#1A1A2E] text-[#F5F4EF] p-8 relative">
-            <div className="absolute -top-3 left-6 bg-[#E8C547] text-[#1A1A2E] text-xs font-black px-3 py-1 uppercase tracking-wider">Most popular</div>
-            <p className="text-3xl font-black mb-1 text-[#E8C547]">$29</p>
-            <p className="text-[#F5F4EF]/50 text-xs uppercase tracking-wider font-semibold mb-6">One-time</p>
-            <ul className="space-y-3 text-sm">
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Everything in Free</li>
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Live landing page published</li>
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Waitlist signup built-in</li>
-            </ul>
-          </div>
-          <div className="border-2 border-[#1A1A2E] p-8">
-            <p className="text-3xl font-black mb-1">$49</p>
-            <p className="text-[#1A1A2E]/50 text-xs uppercase tracking-wider font-semibold mb-6">One-time, total</p>
-            <ul className="space-y-3 text-sm">
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Everything in $29</li>
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> SEO blog posts drafted</li>
-              <li className="flex gap-2"><span className="text-[#E8C547] font-black">✓</span> Social content from your pitch</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Waitlist CTA */}
-      <section id="waitlist" className="bg-[#1A1A2E] py-24 px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-[#E8C547] text-xs font-black uppercase tracking-widest mb-4">Get early access</p>
-          <h2 className="font-black text-3xl sm:text-4xl text-[#F5F4EF] mb-4 leading-tight">
-            Pitch Your Idea —<br />It's Free
-          </h2>
-          <p className="text-[#F5F4EF]/50 text-base mb-10">
-            Join the waitlist and be first in the hot seat when we launch.
+      <div style={{ background: "var(--color-surface)" }}>
+        <Section>
+          <p
+            style={{
+              fontSize: "13px",
+              fontFamily: "var(--font-mono)",
+              color: "var(--color-muted)",
+              marginBottom: "16px",
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+            }}
+          >
+            Pricing
           </p>
-          <WaitlistForm />
+          <h2
+            style={{
+              fontSize: "clamp(24px, 3.5vw, 36px)",
+              fontFamily: "var(--font-serif)",
+              fontWeight: 400,
+              marginBottom: "48px",
+              lineHeight: 1.25,
+            }}
+          >
+            Simple. No subscriptions.
+          </h2>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "20px",
+            }}
+          >
+            {[
+              {
+                name: "Debate",
+                price: "Free",
+                desc: "3-round AI VC debate plus a score. See how your idea holds up before spending a dollar.",
+              },
+              {
+                name: "Launch",
+                price: "$29",
+                desc: "Everything in Debate, plus a live landing page with waitlist at yourname.boringcombinator.com. One-time payment.",
+              },
+              {
+                name: "Grow",
+                price: "$49",
+                desc: "Everything in Launch, plus SEO blog posts and social content drafts to start driving traffic immediately.",
+              },
+            ].map((tier) => (
+              <div
+                key={tier.name}
+                style={{
+                  background: "var(--color-bg)",
+                  border: "0.5px solid var(--color-border)",
+                  borderRadius: "12px",
+                  padding: "32px",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontFamily: "var(--font-sans)",
+                    fontWeight: 500,
+                    marginBottom: "8px",
+                    color: "var(--color-fg)",
+                  }}
+                >
+                  {tier.name}
+                </p>
+                <p
+                  style={{
+                    fontSize: "36px",
+                    fontFamily: "var(--font-mono)",
+                    fontWeight: 400,
+                    marginBottom: "16px",
+                    lineHeight: 1.1,
+                    color: "var(--color-fg)",
+                  }}
+                >
+                  {tier.price}
+                </p>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    lineHeight: 1.6,
+                    color: "var(--color-muted)",
+                  }}
+                >
+                  {tier.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      </div>
+
+      {/* Final CTA */}
+      <Section>
+        <div
+          id="waitlist"
+          style={{
+            maxWidth: "560px",
+            margin: "0 auto",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "clamp(24px, 3.5vw, 36px)",
+              fontFamily: "var(--font-serif)",
+              fontWeight: 400,
+              marginBottom: "16px",
+              lineHeight: 1.25,
+            }}
+          >
+            Stop guessing. Start testing.
+          </h2>
+          <p
+            style={{
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "var(--color-muted)",
+              marginBottom: "32px",
+            }}
+          >
+            Join the waitlist. We'll let you in soon.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <WaitlistForm id="waitlist" />
+          </div>
         </div>
-      </section>
+      </Section>
 
       {/* Footer */}
-      <footer className="bg-[#F5F4EF] border-t-2 border-[#1A1A2E]/10 px-6 py-10">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-black text-base tracking-tight">
-            Boring<span className="text-[#E8C547]">Combinator</span>
-          </span>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-[#1A1A2E]/40">© {new Date().getFullYear()} Boring Combinator. All rights reserved.</span>
-          </div>
-          <div className="bg-[#1A1A2E] text-[#E8C547] text-xs font-black px-4 py-2 tracking-wider uppercase">
-            Built with Boring Combinator
-          </div>
-        </div>
+      <footer
+        style={{
+          borderTop: "0.5px solid var(--color-border)",
+          padding: "32px 24px",
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            fontSize: "14px",
+            color: "var(--color-muted)",
+            fontFamily: "var(--font-sans)",
+          }}
+        >
+          Built with Boring Combinator
+        </p>
       </footer>
+
+      <style>{`
+        .nav-cta {
+          font-size: 14px;
+          font-family: var(--font-sans);
+          font-weight: 500;
+          color: var(--color-bg);
+          background: var(--color-fg);
+          padding: 8px 20px;
+          border-radius: 8px;
+          text-decoration: none;
+          transition: opacity 150ms ease;
+        }
+        .nav-cta:hover {
+          opacity: 0.8;
+        }
+        @media (max-width: 600px) {
+          .value-prop-row {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }
